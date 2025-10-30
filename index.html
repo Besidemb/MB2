@@ -1,83 +1,147 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nosso Cantinho 💜</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Nosso Cantinho 💜 — Versão Definitiva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<canvas id="bg-canvas"></canvas>
-<header>
-  <h1>Nosso Cantinho 💜</h1>
-  <div class="sub">Painel de perfis e moedas</div>
-</header>
-<div class="wrap">
-  <div class="card">
-    <div class="profile-head">
-      <div class="avatar">MB</div>
-      <div>MB</div>
-    </div>
-    <div class="notas" id="notas-mb" data-placeholder="Escreva algo..."></div>
-    <div class="coins">
-      <div class="coin-display"><span class="coin-count" id="moedas-mb">0</span> 💰</div>
-      <div class="controls">
-        <button class="btn" onclick="alterarMoedas('mb',coinStep)">+ Moedas</button>
-        <button class="btn" onclick="alterarMoedas('mb',-coinStep)">- Moedas</button>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header>
+    <h1 id="site-title">Nosso Cantinho 💜</h1>
+    <div class="sub">Um lugar nosso — notas, moedas, mensagens e estrelas ✨</div>
+  </header>
+
+  <main class="wrap" role="main">
+    <section aria-label="Perfis e notas">
+      <div class="profiles">
+        <!-- MB -->
+        <article class="card" id="card-mb" data-profile="mb">
+          <div class="profile-head">
+            <div class="avatar">MB</div>
+            <div>
+              <h2>MB</h2>
+              <p class="small-muted">Seu cantinho</p>
+            </div>
+          </div>
+          <div id="notas-mb" class="notas" contenteditable="true" data-placeholder="Escreva algo especial..."></div>
+          <div class="coins" aria-live="polite">
+            <div class="coin-display">
+              <span class="coin-anim coin-bounce-left" id="coin-left-mb" aria-hidden="true"></span>
+              <div class="coin-info">
+                <div class="small-muted">Moedas</div>
+                <div class="coin-count" id="moedas-mb">100</div>
+              </div>
+              <span class="coin-anim coin-bounce-right" id="coin-right-mb" aria-hidden="true"></span>
+            </div>
+            <div class="controls">
+              <button class="btn" onclick="alterarMoedas('mb', -getCoinStep())">-</button>
+              <button class="btn" onclick="alterarMoedas('mb', getCoinStep())">+</button>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn" onclick="resetProfile('mb')">Reset</button>
+            <button class="btn" onclick="exportProfile('mb')">Exportar</button>
+          </div>
+        </article>
+
+        <!-- Nath -->
+        <article class="card" id="card-nath" data-profile="nath">
+          <div class="profile-head">
+            <div class="avatar">N</div>
+            <div>
+              <h2>Nath</h2>
+              <p class="small-muted">Cantinho dela</p>
+            </div>
+          </div>
+          <div id="notas-nath" class="notas" contenteditable="true" data-placeholder="Escreva algo especial..."></div>
+          <div class="coins" aria-live="polite">
+            <div class="coin-display">
+              <span class="coin-anim coin-bounce-left" id="coin-left-nath" aria-hidden="true"></span>
+              <div class="coin-info">
+                <div class="small-muted">Moedas</div>
+                <div class="coin-count" id="moedas-nath">100</div>
+              </div>
+              <span class="coin-anim coin-bounce-right" id="coin-right-nath" aria-hidden="true"></span>
+            </div>
+            <div class="controls">
+              <button class="btn" onclick="alterarMoedas('nath', -getCoinStep())">-</button>
+              <button class="btn" onclick="alterarMoedas('nath', getCoinStep())">+</button>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn" onclick="resetProfile('nath')">Reset</button>
+            <button class="btn" onclick="exportProfile('nath')">Exportar</button>
+          </div>
+        </article>
       </div>
-    </div>
-  </div>
 
-  <div class="card">
-    <div class="profile-head">
-      <div class="avatar">N</div>
-      <div>Nath</div>
-    </div>
-    <div class="notas" id="notas-nath" data-placeholder="Escreva algo..."></div>
-    <div class="coins">
-      <div class="coin-display"><span class="coin-count" id="moedas-nath">0</span> 💰</div>
-      <div class="controls">
-        <button class="btn" onclick="alterarMoedas('nath',coinStep)">+ Moedas</button>
-        <button class="btn" onclick="alterarMoedas('nath',-coinStep)">- Moedas</button>
+      <!-- Chat -->
+      <div class="card chat-wrap" id="chat-card">
+        <div class="chat-header">
+          <div>
+            <strong>Chat privado</strong>
+            <span class="small-muted">conversa entre MB e Nath</span>
+          </div>
+          <div>
+            <div class="small-muted">Logado como: <span id="logged-as">—</span></div>
+            <button class="btn" onclick="logout()">Sair</button>
+          </div>
+        </div>
+        <div class="messages" id="messages" aria-live="polite"></div>
+        <div class="composer">
+          <input type="text" id="message-input" placeholder="Escreva uma mensagem..." aria-label="Mensagem">
+          <button class="send" onclick="sendComposer()">Enviar</button>
+        </div>
       </div>
+    </section>
+
+    <aside class="panel" aria-label="Painel de ajustes">
+      <h3>⚙️ Ajustes</h3>
+      <div class="field"><label class="small-muted">Cor principal (neon)</label><input type="color" id="input-accent" value="#b57bff"></div>
+      <div class="field"><label class="small-muted">Cor secundária</label><input type="color" id="input-accent2" value="#6f3ec9"></div>
+      <div class="field"><label class="small-muted">Brilho (0.2 — 3)</label><input type="range" id="input-glow" min="0.2" max="3" step="0.1" value="1.2"></div>
+      <div class="field"><label class="small-muted">Fonte</label><select id="input-font"><option value="Poppins, sans-serif">Poppins</option><option value="Inter, sans-serif">Inter</option><option value="Georgia, serif">Georgia</option></select></div>
+      <div class="field"><label class="small-muted">Tamanho da fonte (px)</label><input type="number" id="input-fontsize" min="12" max="22" step="1" value="16"></div>
+      <div class="field"><label class="small-muted">Incremento das moedas</label><input type="number" id="input-step" min="1" max="1000" value="10"></div>
+      <div class="field toggle"><input type="checkbox" id="toggle-stars" checked><label class="small-muted">Mostrar estrelas</label></div>
+      <div class="field"><label class="small-muted">Título da página</label><input type="text" id="input-title" placeholder="Nosso Cantinho 💜" value="Nosso Cantinho 💜"></div>
+      <div class="panel-actions">
+        <button class="btn" onclick="salvarAjustes()">Salvar</button>
+        <button class="btn" onclick="resetAjustes()">Restaurar padrão</button>
+      </div>
+      <hr>
+      <div class="backup">
+        <div class="small-muted">Backup / Importar</div>
+        <button class="btn" onclick="exportAll()">Exportar tudo</button>
+        <button class="btn" onclick="importPrompt()">Importar (colar JSON)</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer>Feito com 💜 por MB & Nath • Tudo salvo localmente no navegador</footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal-back">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <h3 id="login-title">Entrar no Nosso Cantinho</h3>
+      <div class="login-profiles">
+        <button onclick="startLogin('mb')">Entrar como MB</button>
+        <button onclick="startLogin('nath')">Entrar como Nath</button>
+      </div>
+      <div><label class="small-muted">Senha (use a senha combinada)</label><input type="password" id="login-pass" placeholder="Digite a senha"></div>
+      <div class="modal-actions">
+        <button class="btn" onclick="confirmLogin()">Confirmar</button>
+        <button class="btn" onclick="closeLoginIfAllowed()">Cancelar</button>
+      </div>
+      <div class="locked-note">Observação: senha combinada: <strong>9898</strong></div>
+      <div class="small-muted">As ações (enviar/apagar) só são possíveis após login.</div>
     </div>
   </div>
 
-  <div class="chat-wrap card">
-    <div class="chat-header"><h3>Chat</h3></div>
-    <div class="messages" id="messages"></div>
-    <div class="composer">
-      <input type="text" id="message-input" placeholder="Digite sua mensagem...">
-      <button class="btn send" onclick="sendComposer()">Enviar</button>
-    </div>
-  </div>
-</div>
-
-<footer>Nosso Cantinho 💜 - Todos os direitos reservados</footer>
-
-<!-- Login Modal -->
-<div class="modal-back" id="login-modal">
-  <div class="modal">
-    <h2>Login</h2>
-    <div class="field">
-      <label>Usuário</label>
-      <select id="login-user" onchange="startLogin(this.value)">
-        <option value="">Selecione</option>
-        <option value="mb">MB</option>
-        <option value="nath">Nath</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Senha</label>
-      <input type="password" id="login-pass">
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="confirmLogin()">Entrar</button>
-    </div>
-  </div>
-</div>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
