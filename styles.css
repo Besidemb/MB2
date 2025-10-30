@@ -1,1 +1,254 @@
-/* Conteúdo do styles.css aqui */
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Canvas de fundo */
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #0a0a0a;
+}
+
+/* Cabeçalho */
+header {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+header h1 {
+  font-size: 2rem;
+  color: #b57bff;
+  text-shadow: 0 0 10px #b57bff, 0 0 20px #b57bff;
+}
+header .sub {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* Layout principal */
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+/* Card de perfil */
+.card {
+  background: rgba(20, 20, 20, 0.85);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  box-shadow: 0 0 10px #000;
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.profile-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.avatar {
+  width: 50px;
+  height: 50px;
+  background: #6f3ec9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 0 10px #b57bff;
+}
+.notas {
+  min-height: 80px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  outline: none;
+}
+.notas:empty:before {
+  content: attr(data-placeholder);
+  color: #666;
+}
+
+/* Moedas */
+.coins {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.coin-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.coin-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.coin-count {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.btn {
+  padding: 0.3rem 0.8rem;
+  background: #b57bff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background: #6f3ec9;
+}
+
+/* Card chat */
+.chat-wrap {
+  width: 600px;
+  max-width: 100%;
+}
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.messages {
+  background: rgba(255,255,255,0.05);
+  border-radius: 0.5rem;
+  min-height: 150px;
+  padding: 0.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.composer input {
+  flex: 1;
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.send {
+  background: #b57bff;
+}
+
+/* Painel lateral */
+.panel {
+  background: rgba(20,20,20,0.9);
+  border-radius: 1rem;
+  padding: 1rem;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.field input, .field select {
+  padding: 0.3rem;
+  border-radius: 0.4rem;
+  border: none;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+/* Modal login */
+.modal-back {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.modal {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Rodapé */
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #888;
+  padding: 1rem;
+}
+
+/* Moedas animadas */
+.coin-anim {
+  width: 15px;
+  height: 15px;
+  background: #ffd700;
+  border-radius: 50%;
+  display: inline-block;
+}
+.coin-bounce-left {
+  animation: bounce-left 1s infinite alternate;
+}
+.coin-bounce-right {
+  animation: bounce-right 1s infinite alternate;
+}
+@keyframes bounce-left {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+@keyframes bounce-right {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-5px); }
+}
+
+/* Cores personalizáveis */
+:root {
+  --accent: #b57bff;
+  --accent2: #6f3ec9;
+}
