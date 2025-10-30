@@ -11,22 +11,6 @@ html, body { height:100%; font-family:'Poppins', sans-serif; background:#0a0a0a;
   background: #0a0a0a;
 }
 
-/* Estrelas animadas */
-.star {
-  position: absolute;
-  width: 2px; height:2px;
-  background: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  animation: twinkle linear infinite;
-}
-
-@keyframes twinkle {
-  0% { opacity:0.2; transform: scale(1); }
-  50% { opacity:1; transform: scale(1.5); }
-  100% { opacity:0.2; transform: scale(1); }
-}
-
 /* Cabeçalho */
 header { text-align:center; padding:1.5rem 1rem; }
 header h1 { font-size:2rem; color:#b57bff; text-shadow:0 0 10px #b57bff,0 0 20px #b57bff; }
