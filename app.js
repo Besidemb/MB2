@@ -1,4 +1,3 @@
-/* ====================== State & defaults ====================== */
 const STORAGE_KEY = 'nossoCantinho_definitive_v1';
 const PASSWORD = '9898';
 const DEFAULTS = {
@@ -17,7 +16,7 @@ let state = loadState() || DEFAULTS;
 let currentLoginTarget = null;
 let currentUser = null;
 
-/* ====================== Load & Save ====================== */
+/* ===== Load & Save ===== */
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -25,12 +24,12 @@ function loadState(){
     return JSON.parse(raw);
   }catch(e){ console.warn(e); return null; }
 }
-function saveState(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-  catch(e){ console.warn(e); }
+function saveState(){ 
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } 
+  catch(e){ console.warn(e); } 
 }
 
-/* ====================== Apply settings ====================== */
+/* ===== Apply settings ===== */
 function applySettingsToUI(){
   const s = state.settings;
   document.documentElement.style.setProperty('--accent', s.accent);
@@ -38,4 +37,125 @@ function applySettingsToUI(){
   document.documentElement.style.setProperty('--glow', s.glow);
   document.documentElement.style.setProperty('--font-family', s.font);
   document.documentElement.style.fontSize = s.fontsize + 'px';
-  document.getElementById('sit
+  const titleEl = document.getElementById('site-title');
+  if(titleEl) titleEl.textContent = s.title;
+}
+
+/* ===== Profiles ===== */
+function renderProfiles(){
+  const mbNotas = document.getElementById('notas-mb');
+  const mbMoedas = document.getElementById('moedas-mb');
+  const nathNotas = document.getElementById('notas-nath');
+  const nathMoedas = document.getElementById('moedas-nath');
+
+  if(mbNotas) mbNotas.innerText = state.profiles.mb.notas || '';
+  if(mbMoedas) mbMoedas.textContent = state.profiles.mb.moedas ?? 0;
+  if(nathNotas) nathNotas.innerText = state.profiles.nath.notas || '';
+  if(nathMoedas) nathMoedas.textContent = state.profiles.nath.moedas ?? 0;
+}
+
+function alterarMoedas(profile, valor){
+  const p = state.profiles[profile];
+  if(!p) return;
+  p.moedas = Math.max(0, (Number(p.moedas)||0) + Number(valor));
+  saveState(); renderProfiles();
+}
+
+function getCoinStep(){ return Number(state.settings.step) || 10; }
+
+/* ===== Messages ===== */
+function generateId(){ return 'm_' + Math.random().toString(36).slice(2,9); }
+
+function sendMessage(from, text){
+  if(!text || !from) return;
+  const msg = { id: generateId(), from, text:text.trim(), time:(new Date()).toISOString(), deleteRequests:{mb:false,nath:false} };
+  state.messages.push(msg);
+  saveState(); renderMessages(); scrollMessagesToBottom();
+}
+
+function sendComposer(){
+  if(!currentUser){ alert('Faça login'); return; }
+  const input = document.getElementById('message-input');
+  if(!input) return;
+  const text = input.value.trim();
+  if(!text) return;
+  sendMessage(currentUser, text);
+  input.value = '';
+}
+
+function renderMessages(){
+  const container = document.getElementById('messages');
+  if(!container) return;
+  container.innerHTML = '';
+  state.messages.forEach(m=>{
+    const el = document.createElement('div');
+    el.className = 'msg ' + (m.from === currentUser ? 'me' : 'them');
+
+    const header = document.createElement('div');
+    header.style.fontWeight='700';
+    header.textContent = m.from === 'mb' ? 'MB' : 'Nath';
+    el.appendChild(header);
+
+    const text = document.createElement('div');
+    text.style.whiteSpace='pre-wrap';
+    text.style.marginTop='6px';
+    text.textContent = m.text;
+    el.appendChild(text);
+
+    container.appendChild(el);
+  });
+}
+
+function scrollMessagesToBottom(){
+  const c = document.getElementById('messages');
+  if(!c) return;
+  setTimeout(()=>{ c.scrollTop = c.scrollHeight; }, 40);
+}
+
+/* ===== Login ===== */
+function startLogin(target){ 
+  currentLoginTarget = target; 
+  const modal = document.getElementById('login-modal');
+  if(modal) modal.style.display='flex'; 
+}
+
+function confirmLogin(){
+  const passInput = document.getElementById('login-pass');
+  const pass = passInput ? passInput.value : '';
+  if(pass===PASSWORD && currentLoginTarget){
+    currentUser = currentLoginTarget;
+    const modal = document.getElementById('login-modal');
+    if(modal) modal.style.display='none';
+    renderMessages();
+    scrollMessagesToBottom();
+  } else { alert('Senha incorreta'); }
+}
+
+/* ===== Init ===== */
+function hookNotesAutoSave(){
+  ['mb','nath'].forEach(id=>{
+    const el = document.getElementById('notas-'+id);
+    if(el){
+      el.addEventListener('input', ()=> { 
+        state.profiles[id].notas = el.innerText; 
+        saveState(); 
+      });
+    }
+  });
+}
+
+function init(){
+  applySettingsToUI(); 
+  renderProfiles(); 
+  hookNotesAutoSave();
+
+  const input = document.getElementById('message-input');
+  if(input){
+    input.addEventListener('keydown', function(e){
+      if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendComposer(); }
+    });
+  }
+}
+
+init(); 
+saveState();
