@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosso Cantinho 💜</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<header>
+  <h1>Nosso Cantinho 💜</h1>
+  <div class="sub">Painel de perfis e moedas</div>
+</header>
+<div class="wrap">
+  <div class="card">
+    <div class="profile-head">
+      <div class="avatar">MB</div>
+      <div>MB</div>
+    </div>
+    <div class="notas" id="notas-mb" data-placeholder="Escreva algo..."></div>
+    <div class="coins">
+      <div class="coin-display"><span class="coin-count" id="moedas-mb">0</span> 💰</div>
+      <div class="controls">
+        <button class="btn" onclick="alterarMoedas('mb',coinStep)">+ Moedas</button>
+        <button class="btn" onclick="alterarMoedas('mb',-coinStep)">- Moedas</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="profile-head">
+      <div class="avatar">N</div>
+      <div>Nath</div>
+    </div>
+    <div class="notas" id="notas-nath" data-placeholder="Escreva algo..."></div>
+    <div class="coins">
+      <div class="coin-display"><span class="coin-count" id="moedas-nath">0</span> 💰</div>
+      <div class="controls">
+        <button class="btn" onclick="alterarMoedas('nath',coinStep)">+ Moedas</button>
+        <button class="btn" onclick="alterarMoedas('nath',-coinStep)">- Moedas</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-wrap card">
+    <div class="chat-header"><h3>Chat</h3></div>
+    <div class="messages" id="messages"></div>
+    <div class="composer">
+      <input type="text" id="message-input" placeholder="Digite sua mensagem...">
+      <button class="btn send" onclick="sendComposer()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<footer>Nosso Cantinho 💜 - Todos os direitos reservados</footer>
+
+<!-- Login Modal -->
+<div class="modal-back" id="login-modal">
+  <div class="modal">
+    <h2>Login</h2>
+    <div class="field">
+      <label>Usuário</label>
+      <select id="login-user" onchange="startLogin(this.value)">
+        <option value="">Selecione</option>
+        <option value="mb">MB</option>
+        <option value="nath">Nath</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="login-pass">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="confirmLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
