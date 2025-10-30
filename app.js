@@ -158,4 +158,51 @@ function init(){
 }
 
 init(); 
+/* ====================== Fundo animado de estrelas ====================== */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+let stars = [];
+
+function resizeCanvas(){
+  if(!canvas) return;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function createStars(count=100){
+  stars = [];
+  for(let i=0;i<count;i++){
+    stars.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*1.5 + 0.5,
+      alpha: Math.random(),
+      dx: (Math.random()-0.5)*0.1,
+      dy: (Math.random()-0.5)*0.1
+    });
+  }
+}
+createStars(150);
+
+function drawStars(){
+  if(!ctx) return;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+    ctx.fill();
+    s.x += s.dx;
+    s.y += s.dy;
+    if(s.x<0) s.x=canvas.width;
+    if(s.x>canvas.width) s.x=0;
+    if(s.y<0) s.y=canvas.height;
+    if(s.y>canvas.height) s.y=0;
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
 saveState();
